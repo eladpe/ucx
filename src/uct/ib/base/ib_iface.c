@@ -717,7 +717,7 @@ ucs_status_t uct_ib_iface_query(uct_ib_iface_t *iface, size_t xport_hdr_len,
             iface_attr->latency.overhead += 200e-9;
         }
     }
-    
+
     iface_attr->latency.growth = 0;
 
     /* Wire speed calculation: Width * SignalRate * Encoding */
@@ -728,13 +728,16 @@ ucs_status_t uct_ib_iface_query(uct_ib_iface_t *iface, size_t xport_hdr_len,
     mtu                   = ucs_min(uct_ib_mtu_value(active_mtu),
                                     iface->config.seg_size);
 
-    extra_pkt_len = UCT_IB_BTH_LEN + xport_hdr_len +  UCT_IB_ICRC_LEN + UCT_IB_VCRC_LEN + UCT_IB_DELIM_LEN;
-
     if (IBV_PORT_IS_LINK_LAYER_ETHERNET(uct_ib_iface_port_attr(iface))) {
-        extra_pkt_len += UCT_IB_GRH_LEN + UCT_IB_ROCE_LEN;
+        extra_pkt_len = UCT_IB_ROCE_IPH_ROCE_LEN + UCT_IB_ROCE_UDPH_ROCE_LEN +
+                        UCT_IB_BTH_LEN + xport_hdr_len + UCT_IB_ICRC_LEN +
+                        UCT_IB_VCRC_LEN + UCT_IB_ROCE_FCS +
+                        UCT_IB_ROCE_PREAMBLE_LEN + UCT_IB_GRH_LEN;
+
     } else {
         /* TODO check if UCT_IB_DELIM_LEN is present in RoCE as well */
-        extra_pkt_len += UCT_IB_LRH_LEN;
+        extra_pkt_len = UCT_IB_BTH_LEN + xport_hdr_len +  UCT_IB_ICRC_LEN +
+                        UCT_IB_VCRC_LEN + UCT_IB_DELIM_LEN + UCT_IB_LRH_LEN;
     }
 
     iface_attr->bandwidth = (wire_speed * mtu) / (mtu + extra_pkt_len);

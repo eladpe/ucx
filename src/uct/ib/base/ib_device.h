@@ -20,6 +20,10 @@
 #define UCT_IB_LRH_LEN              8   /* IB Local routing header */
 #define UCT_IB_GRH_LEN              40  /* IB GLobal routing header */
 #define UCT_IB_BTH_LEN              12  /* IB base transport header */
+#define UCT_IB_ROCE_PREAMBLE_LEN    8   /* ETH PREAMBLE size */
+#define UCT_IB_ROCE_IPH_ROCE_LEN    20  /* IP header size */
+#define UCT_IB_ROCE_UDPH_ROCE_LEN   8   /* UDP header size */
+#define UCT_IB_ROCE_FCS             4   /* ROCE check sum size*/
 #define UCT_IB_ROCE_LEN             14  /* Ethernet header -
                                            6B for Destination MAC +
                                            6B for Source MAC + 2B Type (RoCE) */
