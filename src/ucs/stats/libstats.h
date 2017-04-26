@@ -35,6 +35,9 @@ enum {
 #define UCS_STATS_NODE_ARG(_node) \
     (_node)->cls->name, (_node)->name
 
+#define UCS_STATS_INDENT(is_sum, indent)  is_sum ? 0 : (indent) * 2, ""
+#define UCS_STATS_IS_LAST_COUNTER(counters_bits, current) \
+    (counters_bits > ((2<<current) - 1))
 
 typedef struct ucs_stats_server    *ucs_stats_server_h; /* Handle to server */
 typedef struct ucs_stats_client    *ucs_stats_client_h; /* Handle to client */
@@ -56,14 +59,27 @@ struct ucs_stats_class {
 
 /* In-memory statistics node */
 struct ucs_stats_node {
-    ucs_stats_class_t    *cls;
-    ucs_stats_node_t     *parent;
-    char                 name[UCS_STAT_NAME_MAX + 1];
-    ucs_list_link_t      list;
-    ucs_list_link_t      children[UCS_STATS_CHILDREN_LAST];
-    ucs_stats_counter_t  counters[];
+    ucs_stats_class_t        *cls;
+    ucs_stats_node_t         *parent;
+    char                     name[UCS_STAT_NAME_MAX + 1];
+    ucs_list_link_t          list;
+    ucs_list_link_t          children[UCS_STATS_CHILDREN_LAST];
+    ucs_list_link_t          type_list;
+    ucs_stats_filter_node_t  *filter_node;
+    ucs_stats_counter_t      counters[];
 };
 
+struct ucs_stats_filter_node {
+    ucs_stats_class_t         *cls;
+    ucs_stats_filter_node_t   *parent;
+    char                      name[UCS_STAT_NAME_MAX + 1];
+    ucs_list_link_t           children;
+    ucs_list_link_t           list;
+    int                       type_list_len;
+    ucs_list_link_t           type_list;
+    int                       ref_count;
+    uint64_t                  counters_bitmask;
+};
 
 /**
  * Initialize statistics node.

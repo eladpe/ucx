@@ -101,6 +101,9 @@ static void uct_ud_ep_reset(uct_ud_ep_t *ep)
     ep->resend.max_psn   = ep->tx.acked_psn;
 
     ep->rx.acked_psn = UCT_UD_INITIAL_PSN - 1;
+printf("ep->rx.stats %pi %s %d\n", ep->rx.stats, __FUNCTION__, __LINE__);
+
+printf("%s %d\n", __FUNCTION__, __LINE__);
     ucs_frag_list_init(ep->tx.psn-1, &ep->rx.ooo_pkts, 0 /*TODO: ooo support */
                        UCS_STATS_ARG(ep->rx.stats));
 }
@@ -147,6 +150,7 @@ UCS_CLASS_INIT_FUNC(uct_ud_ep_t, uct_ud_iface_t *iface)
 
     memset(self, 0, sizeof(*self));
     UCS_CLASS_CALL_SUPER_INIT(uct_base_ep_t, &iface->super.super);
+printf("ep->rx.stats %p %s %d\n", self->rx.stats, __FUNCTION__, __LINE__);
 
     self->dest_ep_id = UCT_UD_EP_NULL_ID;
     uct_ud_ep_reset(self);
@@ -254,6 +258,7 @@ static ucs_status_t uct_ud_ep_connect_to_iface(uct_ud_ep_t *ep,
     char buf[128];
 
     ucs_frag_list_cleanup(&ep->rx.ooo_pkts);
+printf("ep->rx.stats %p %s %d\n", ep->rx.stats, __FUNCTION__, __LINE__);
     uct_ud_ep_reset(ep);
 
     ucs_debug(UCT_IB_IFACE_FMT" lid %d qpn 0x%x epid %u ep %p connected to "
@@ -271,6 +276,8 @@ static ucs_status_t uct_ud_ep_disconnect_from_iface(uct_ep_h tl_ep)
     uct_ud_ep_t *ep = ucs_derived_of(tl_ep, uct_ud_ep_t);
 
     ucs_frag_list_cleanup(&ep->rx.ooo_pkts);
+printf("ep->rx.stats %p %s %d\n", ep->rx.stats, __FUNCTION__, __LINE__);
+
     uct_ud_ep_reset(ep);
     ep->dest_ep_id = UCT_UD_EP_NULL_ID;
 
@@ -348,6 +355,8 @@ ucs_status_t uct_ud_ep_connect_to_ep(uct_ud_ep_t *ep,
     ep->dest_ep_id = uct_ib_unpack_uint24(ep_addr->ep_id);
 
     ucs_frag_list_cleanup(&ep->rx.ooo_pkts);
+printf("ep->rx.stats %p %s %d\n", ep->rx.stats, __FUNCTION__, __LINE__);
+
     uct_ud_ep_reset(ep);
 
     ucs_debug(UCT_IB_IFACE_FMT" slid %d qpn 0x%x epid %u connected to %s qpn 0x%x "

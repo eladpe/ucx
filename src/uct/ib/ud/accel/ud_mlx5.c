@@ -24,6 +24,7 @@
 #include <uct/ib/ud/base/ud_def.h>
 #include <uct/ib/ud/base/ud_inl.h>
 
+#include <ucs/debug/debug.h>
 
 static ucs_config_field_t uct_ud_mlx5_iface_config_table[] = {
   {"UD_", "", NULL,
@@ -653,7 +654,7 @@ static UCS_CLASS_INIT_FUNC(uct_ud_mlx5_iface_t,
     int i;
 
     ucs_trace_func("");
-
+ucs_debug_print_backtrace(stdout, 2);
     UCS_CLASS_CALL_SUPER_INIT(uct_ud_iface_t, &uct_ud_mlx5_iface_ops,
                               md, worker, params, 0, &config->super);
 

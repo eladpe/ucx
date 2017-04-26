@@ -251,7 +251,7 @@ void __ucm_log(const char *file, unsigned line, const char *function,
     va_list ap;
     struct timeval tv;
     ssize_t nwrite;
-
+printf("TEST\n");
     gettimeofday(&tv, NULL);
     ucm_log_snprintf(buf, UCM_LOG_BUG_SIZE - 1, "[%lu.%06lu] [%s:%d] %18s:%-4d UCX  %s ",
                      tv.tv_sec, tv.tv_usec, ucm_log_hostname, getpid(),

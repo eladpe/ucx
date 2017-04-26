@@ -40,6 +40,8 @@ ucs_status_t ucs_frag_list_init(ucs_frag_list_sn_t initial_sn, ucs_frag_list_t *
 #if ENABLE_STATS
     frag_list->prev_sn = initial_sn;
 #endif
+
+printf("numYF_F %s %d \n", __FUNCTION__, __LINE__);
     status = UCS_STATS_NODE_ALLOC(&frag_list->stats, &ucs_frag_list_stats_class,
                                  stats_parent);
     return status;

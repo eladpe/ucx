@@ -289,4 +289,18 @@ UCS_TEST_F(stats_on_exit_test, dump) {
     free_nodes();
 }
 
+
+//UCS_TEST_P(test_ucp_wireup, connect_disconnect) {
+//printf("numYF_F %s %d\n", __FUNCTION__, __LINE__);
+    sender().connect(&receiver());
+//    if (!is_loopback()) {
+ //       receiver().connect(&sender());
+//    }
+//    test_ucp_wireup::disconnect(sender().revoke_ep());
+//    if (!is_loopback()) {
+//        receiver().disconnect();
+//    }
+//}
+
+
 #endif
