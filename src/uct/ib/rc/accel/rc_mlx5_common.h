@@ -211,10 +211,12 @@ done:
     max_batch = rc_iface->super.config.rx_max_batch;
     if (rc_iface->rx.srq.available >= max_batch) {
         if (rc_iface->rx.srq.reserved) {
-            count = ucs_min(rc_iface->rx.srq.reserved, 16);
+            count = ucs_min(rc_iface->rx.srq.reserved, 512);
             rc_iface->rx.srq.available += count;
             rc_iface->rx.srq.reserved  -= count;
+            uct_rc_mlx5_iface_srq_post_recv(rc_iface, &mlx5_common_iface->rx.srq);
         }
+    } else {
         uct_rc_mlx5_iface_srq_post_recv(rc_iface, &mlx5_common_iface->rx.srq);
     }
     return status;
